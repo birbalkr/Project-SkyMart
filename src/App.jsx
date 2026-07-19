@@ -1,37 +1,29 @@
-
-import LoginRoutes from "./routes/LoginRoutes"
 import AppRoutes from "./routes/AppRoutes";
-import { Navigate } from "react-router";
-import { useEffect } from "react";
+import LoginRoutes from "./routes/LoginRoutes";
 import Navbar from "./components/Navbar";
-
+import { Navigate } from "react-router";
 
 function App() {
-
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const isLogin = user?.isLogin ?? false;
 
-  useEffect(() => {
-    if (!isLogin && window.location.pathname !== "/login") {
-      window.location.pathname = "/login";
-    }
-  }, [isLogin]);
-
+  if (!isLogin) {
+    return (
+      <>
+        <Navigate to="/login" replace />
+        <LoginRoutes />
+      </>
+    );
+  }
 
   return (
-    <>
-      {
-        isLogin ?
-          <div className="bg-black text-white font-sans">
-            <div className="mx-16">
-              <Navbar />
-              <AppRoutes />
-            </div>
-          </div>
-          : <LoginRoutes />
-      }
-    </>
-  )
+    <div className="bg-black text-white font-sans">
+      <div className="mx-16">
+        <Navbar />
+        <AppRoutes />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;

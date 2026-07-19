@@ -1,7 +1,7 @@
 import AppRoutes from "./routes/AppRoutes";
 import LoginRoutes from "./routes/LoginRoutes";
 import Navbar from "./components/Navbar";
-import { Navigate } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -9,10 +9,7 @@ function App() {
 
   if (!isLogin) {
     return (
-      <>
-        <Navigate to="/login" replace />
-        <LoginRoutes />
-      </>
+      <LoginRoutes />
     );
   }
 

@@ -14,7 +14,7 @@ function Navbar() {
         console.log("click");
         const isLoginData = JSON.parse(localStorage.getItem('user'));
         localStorage.setItem('user', JSON.stringify({ ...isLoginData, isLogin: false }));
-        window.location.pathname = "/login"
+        window.location.pathname = "/"
     }
 
     return (

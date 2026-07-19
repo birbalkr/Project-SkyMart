@@ -9,23 +9,19 @@ import Navbar from "./components/Navbar";
 function App() {
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
-  const isLoginData = user?.isLogin ?? false;
+  const isLogin = user?.isLogin ?? false;
 
   useEffect(() => {
-    if (isLoginData) {
-      return
+    if (!isLogin && window.location.pathname !== "/login") {
+      window.location.pathname = "/login";
     }
-    else {
-      if (window.location.pathname !== "/login") {
-        window.location.pathname = "/login"
-      }
-    }
-  }, [isLoginData]);
+  }, [isLogin]);
+
 
   return (
     <>
       {
-        isLoginData ?
+        isLogin ?
           <div className="bg-black text-white font-sans">
             <div className="mx-16">
               <Navbar />

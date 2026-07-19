@@ -28,7 +28,7 @@ function Signin() {
             let updatedUser = { ...user, isLogin: true };
             localStorage.setItem('user', JSON.stringify(updatedUser));
             console.log("login");
-            window.location.href = "/";
+            window.location.pathname = "/";
         }
         else {
             alert("Invalid email or password");

@@ -28,7 +28,7 @@ function Create() {
         };
         localStorage.setItem('user', JSON.stringify(user));
         reset();
-        window.location.href = '/';
+        window.location.pathname = '/';
     }
 
     return (

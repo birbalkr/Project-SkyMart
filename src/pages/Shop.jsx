@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Search, ChevronDown, Star, ShoppingCart } from "lucide-react";
+import axios from "axios";
 
 export default function Shop() {
+    const [productData, setProductData] = useState([]);
+
+    const Products = async () => {
+        try {
+            let res = await axios.get('https://dummyjson.com/products');
+            setProductData(res.data.products);
+        } catch (error) {
+            console.log("API Error", error);
+        }
+    }
+
+    console.log(productData);
+
+    useEffect(() => {
+        Products();
+    }, [])
     return (
         <div className="min-h-screen bg-black text-white font-sans px-6 py-8">
             {/* Header */}
@@ -33,164 +50,47 @@ export default function Shop() {
             {/* Product Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
                 {/* Card 1 */}
-                <div className="bg-white rounded-2xl overflow-hidden flex flex-col">
-                    <div className="relative">
-                        <span className="absolute top-3 left-3 bg-black/70 text-white text-xs font-medium px-3 py-1 rounded-full z-10">
-                            Electronics
-                        </span>
-                        <div className="h-44 bg-yellow-400 flex items-center justify-center text-5xl">
-                            🎧
+                {productData.map((item) => (
+                    <div key={item.id} className="bg-white rounded-2xl overflow-hidden flex flex-col">
+                        <div className="relative">
+                            <span className="absolute top-3 left-3 bg-black/70 text-white text-xs font-medium px-3 py-1 rounded-full z-10">
+                                {item.category}
+                            </span>
+                            <div className="h-44 bg-yellow-400 flex items-center justify-center text-5xl">
+                                <img src={item.images[0]} alt={item.title} className="h-full w-full object-cover p-6" />
+                            </div>
                         </div>
-                    </div>
-                    <div className="p-4 flex flex-col flex-1">
-                        <div className="text-xs text-gray-500 mb-1">Electronics</div>
-                        <div className="font-bold text-gray-900 leading-snug mb-2">
-                            Wireless Bluetooth Headphones
-                        </div>
-                        <div className="flex items-center gap-1 text-amber-400 mb-3">
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <span className="text-xs text-gray-400 ml-1">(120)</span>
-                        </div>
-                        <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between">
-                            <span className="font-extrabold text-lime-500 text-lg">$99.99</span>
-                            <button className="flex items-center gap-1 bg-lime-400 hover:bg-lime-300 text-black text-sm font-semibold px-4 py-2 rounded-full transition-colors">
-                                <ShoppingCart size={14} /> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                        <div className="p-4 flex flex-col flex-1">
+                            <div className="text-xs text-gray-500 mb-1">{item.category}</div>
+                            <div className="font-bold text-gray-900 leading-snug mb-2">
+                                {item.title}
+                            </div>
+                            <div className="flex items-center gap-1 mb-3">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <Star
+                                        key={star}
+                                        size={14}
+                                        className={
+                                            star <= Math.round(item.rating)
+                                                ? "fill-amber-400 text-amber-400"
+                                                : "text-gray-300"
+                                        }
+                                    />
+                                ))}
 
-                {/* Card 2 */}
-                <div className="bg-white rounded-2xl overflow-hidden flex flex-col">
-                    <div className="relative">
-                        <span className="absolute top-3 left-3 bg-black/70 text-white text-xs font-medium px-3 py-1 rounded-full z-10">
-                            Electronics
-                        </span>
-                        <div className="h-44 bg-gray-200 flex items-center justify-center text-5xl">
-                            ⌚
+                                <span className="text-xs text-gray-400 ml-1">
+                                    ({item.rating})
+                                </span>
+                            </div>
+                            <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between">
+                                <span className="font-extrabold text-lime-500 text-lg">₹ {item.price} </span>
+                                <button className="flex items-center gap-1 bg-lime-400 hover:bg-lime-300 text-black text-sm font-semibold px-4 py-2 rounded-full transition-colors">
+                                    <ShoppingCart size={14} /> Add
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div className="p-4 flex flex-col flex-1">
-                        <div className="text-xs text-gray-500 mb-1">Electronics</div>
-                        <div className="font-bold text-gray-900 leading-snug mb-2">
-                            Smart Watch Series 5
-                        </div>
-                        <div className="flex items-center gap-1 text-amber-400 mb-3">
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="text-gray-300" />
-                            <span className="text-xs text-gray-400 ml-1">(85)</span>
-                        </div>
-                        <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between">
-                            <span className="font-extrabold text-lime-500 text-lg">$299.99</span>
-                            <button className="flex items-center gap-1 bg-lime-400 hover:bg-lime-300 text-black text-sm font-semibold px-4 py-2 rounded-full transition-colors">
-                                <ShoppingCart size={14} /> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Card 3 */}
-                <div className="bg-white rounded-2xl overflow-hidden flex flex-col">
-                    <div className="relative">
-                        <span className="absolute top-3 left-3 bg-black/70 text-white text-xs font-medium px-3 py-1 rounded-full z-10">
-                            Clothing
-                        </span>
-                        <div className="h-44 bg-gray-100 flex items-center justify-center text-5xl">
-                            👕
-                        </div>
-                    </div>
-                    <div className="p-4 flex flex-col flex-1">
-                        <div className="text-xs text-gray-500 mb-1">Clothing</div>
-                        <div className="font-bold text-gray-900 leading-snug mb-2">
-                            Comfortable Cotton T-Shirt
-                        </div>
-                        <div className="flex items-center gap-1 text-amber-400 mb-3">
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="text-gray-300" />
-                            <span className="text-xs text-gray-400 ml-1">(200)</span>
-                        </div>
-                        <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between">
-                            <span className="font-extrabold text-lime-500 text-lg">$24.99</span>
-                            <button className="flex items-center gap-1 bg-lime-400 hover:bg-lime-300 text-black text-sm font-semibold px-4 py-2 rounded-full transition-colors">
-                                <ShoppingCart size={14} /> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Card 4 */}
-                <div className="bg-white rounded-2xl overflow-hidden flex flex-col">
-                    <div className="relative">
-                        <span className="absolute top-3 left-3 bg-black/70 text-white text-xs font-medium px-3 py-1 rounded-full z-10">
-                            Furniture
-                        </span>
-                        <div className="h-44 bg-stone-200 flex items-center justify-center text-5xl">
-                            🛋️
-                        </div>
-                    </div>
-                    <div className="p-4 flex flex-col flex-1">
-                        <div className="text-xs text-gray-500 mb-1">Furniture</div>
-                        <div className="font-bold text-gray-900 leading-snug mb-2">
-                            Ergonomic Office Chair
-                        </div>
-                        <div className="flex items-center gap-1 text-amber-400 mb-3">
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <span className="text-xs text-gray-400 ml-1">(65)</span>
-                        </div>
-                        <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between">
-                            <span className="font-extrabold text-lime-500 text-lg">$199.99</span>
-                            <button className="flex items-center gap-1 bg-lime-400 hover:bg-lime-300 text-black text-sm font-semibold px-4 py-2 rounded-full transition-colors">
-                                <ShoppingCart size={14} /> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Card 5 */}
-                <div className="bg-white rounded-2xl overflow-hidden flex flex-col">
-                    <div className="relative">
-                        <span className="absolute top-3 left-3 bg-black/70 text-white text-xs font-medium px-3 py-1 rounded-full z-10">
-                            Home
-                        </span>
-                        <div className="h-44 bg-neutral-50 flex items-center justify-center text-5xl">
-                            🍶
-                        </div>
-                    </div>
-                    <div className="p-4 flex flex-col flex-1">
-                        <div className="text-xs text-gray-500 mb-1">Home</div>
-                        <div className="font-bold text-gray-900 leading-snug mb-2">
-                            Stainless Steel Water Bottle
-                        </div>
-                        <div className="flex items-center gap-1 text-amber-400 mb-3">
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="fill-amber-400" />
-                            <Star size={14} className="text-gray-300" />
-                            <span className="text-xs text-gray-400 ml-1">(150)</span>
-                        </div>
-                        <div className="border-t border-gray-100 pt-3 mt-auto flex items-center justify-between">
-                            <span className="font-extrabold text-lime-500 text-lg">$34.99</span>
-                            <button className="flex items-center gap-1 bg-lime-400 hover:bg-lime-300 text-black text-sm font-semibold px-4 py-2 rounded-full transition-colors">
-                                <ShoppingCart size={14} /> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
         </div>
     );

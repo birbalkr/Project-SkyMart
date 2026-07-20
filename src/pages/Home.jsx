@@ -141,7 +141,6 @@ export default function Home() {
                             key={index}
                             className="bg-white rounded-2xl p-6 text-center"
                         >
-                            <div className="text-3xl mb-3">💻</div>
                             <div className="font-bold text-gray-900">{item}</div>
                         </div>
                     ))}

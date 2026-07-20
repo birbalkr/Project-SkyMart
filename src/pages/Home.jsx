@@ -1,9 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Zap, ShoppingCart, LogOut, ArrowRight, Package, TrendingUp, Star, Tag, ShoppingBag } from "lucide-react";
 import { MyStore } from "../context/MyContext";
+import { GetCategoryList } from "../api/ShopAPI";
+import axios from "axios";
 
 export default function Home() {
     let { userName } = useContext(MyStore)
+
+    const [categoryListData, setCategoryListData] = useState([])
+    const [showAll, setShowAll] = useState(false);
+
+    const displayedCategories = showAll
+        ? categoryListData
+        : categoryListData.slice(0, 6);
+
+    const categoryList = async () => {
+        try {
+            let res = await axios.get('https://dummyjson.com/products/category-list')
+            setCategoryListData(res.data)
+        } catch (error) {
+            console.log("API Error", error);
+        }
+    }
+
+    useEffect(() => {
+        categoryList();
+    }, [])
     return (
         <div className="min-h-screen bg-black text-white font-sans px-6 py-5">
             {/* Hero */}
@@ -103,41 +125,26 @@ export default function Home() {
             <div className="mt-10">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">Shop by Category</h2>
-                    <a href="#" className="text-sm font-medium text-lime-400 hover:text-lime-300 flex items-center gap-1">
-                        View All <ArrowRight size={14} />
-                    </a>
+                    {categoryListData.length > 6 && (
+                        <div className="text-center mt-6">
+                            <button className="text-sm font-medium text-lime-400 hover:text-lime-300 flex items-center gap-1" onClick={() =>
+                                setShowAll(!showAll)}>
+
+                                {showAll ? "Show Less" : "View All"}
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <div className="bg-white rounded-2xl p-6 flex flex-col items-center text-center">
-                        <div className="text-3xl mb-3">💻</div>
-                        <div className="font-bold text-gray-900">Electronics</div>
-                        <div className="text-sm text-gray-500 mt-1">17 items</div>
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 flex flex-col items-center text-center">
-                        <div className="text-3xl mb-3">📦</div>
-                        <div className="font-bold text-gray-900">Clothing</div>
-                        <div className="text-sm text-gray-500 mt-1">2 items</div>
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 flex flex-col items-center text-center">
-                        <div className="text-3xl mb-3">📦</div>
-                        <div className="font-bold text-gray-900">Furniture</div>
-                        <div className="text-sm text-gray-500 mt-1">3 items</div>
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 flex flex-col items-center text-center">
-                        <div className="text-3xl mb-3">📦</div>
-                        <div className="font-bold text-gray-900">Home</div>
-                        <div className="text-sm text-gray-500 mt-1">14 items</div>
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 flex flex-col items-center text-center">
-                        <div className="text-3xl mb-3">📦</div>
-                        <div className="font-bold text-gray-900">Sports</div>
-                        <div className="text-sm text-gray-500 mt-1">8 items</div>
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 flex flex-col items-center text-center">
-                        <div className="text-3xl mb-3">📦</div>
-                        <div className="font-bold text-gray-900">Accessories</div>
-                        <div className="text-sm text-gray-500 mt-1">6 items</div>
-                    </div>
+                    {displayedCategories.map((item, index) => (
+                        <div
+                            key={index}
+                            className="bg-white rounded-2xl p-6 text-center"
+                        >
+                            <div className="text-3xl mb-3">💻</div>
+                            <div className="font-bold text-gray-900">{item}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
 

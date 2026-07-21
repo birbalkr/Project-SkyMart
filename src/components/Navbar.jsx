@@ -1,14 +1,13 @@
 import React, { useContext, useState } from 'react'
 import { NavLink } from "react-router";
 import { Zap, ShoppingCart, LogOut, ArrowRight, Package, TrendingUp, Star, Tag, ShoppingBag, X } from "lucide-react";
-import CartData from './CartData';
 import { MyStore } from '../context/MyContext';
+import CartData from './CartData';
 
 
 function Navbar() {
     let { userName } = useContext(MyStore);
     const [isCartOpen, setIsCartOpen] = useState(false);
-
 
     const logout = () => {
         console.log("click");

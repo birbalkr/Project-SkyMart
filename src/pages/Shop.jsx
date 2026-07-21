@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Search, ChevronDown, Star, ShoppingCart } from "lucide-react";
+import { Search, ChevronDown, Star, ShoppingCart, X } from "lucide-react";
 import axios from "axios";
 import { MyStore } from "../context/MyContext";
 import Product from "./Product";
@@ -23,13 +23,13 @@ export default function Shop() {
     }, [])
     // console.log(cartSaveData);
 
-    const SelectCategory = async(e) => {
+    const SelectCategory = async (e) => {
         console.log("Selected", e.target.value);
         let valueItem = e.target.value;
         try {
             let res = await axios.get(`https://dummyjson.com/products/category/${valueItem}`);
-            console.log("SelectCategory API",res.data.products);
-            
+            console.log("SelectCategory API", res.data.products);
+
             setSelectItemName(res.data.products);
         } catch (error) {
             console.log("API Error :: ", error);
@@ -70,6 +70,12 @@ export default function Shop() {
                 <button className="flex items-center justify-between gap-3 border border-gray-700 rounded-xl px-4 py-3 text-sm min-w-[150px]">
                     Featured <ChevronDown size={16} className="text-gray-400" />
                 </button>
+
+                {SelectItemName.length > 0 && (
+                    <button className=" flex justify-center items-center gap-2 px-3 font-bold text-red-800 border-1 rounded-2xl" onClick={() => setSelectItemName([])}>
+                        <X className="text-sm"/> Clear
+                    </button>
+                )}
             </div>
 
             {
